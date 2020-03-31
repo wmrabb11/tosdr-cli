@@ -40,14 +40,11 @@ def print_summary(points):
         elif p['point'] == 'bad':
             the_ugly.append( f'[-] {title}' )
     print( '--Positive--' )
-    for g in the_good:
-        print( g )
+    print( *the_good, sep='\n' )
     print( '--Neutral--' )
-    for b in the_bad:
-        print( b )
+    print( *the_bad, sep='\n' )
     print( '--Negative--' )
-    for u in the_ugly:
-        print( u )
+    print( *the_ugly, sep='\n' )
 
 def find_close_match(site):
     json_file = open(API_FILE)
