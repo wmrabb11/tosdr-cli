@@ -30,7 +30,12 @@ def print_verbose(points):
 def print_summary(points):
     for p in points:
         title = p['title']
-        print( f'[*] {title}' )
+        if p['point'] == 'good':
+            print( f'[+] {title}' )
+        elif p['point'] == 'neutral':
+            print( f'[*] {title}' )
+        elif p['point'] == 'bad':
+            print( f'[-] {title}' )
 
 def main(site, verbose=False, summary=False):
     print( f'-----Privacy Policy Info for {site}-----' )
