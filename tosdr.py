@@ -28,17 +28,41 @@ def print_verbose(points):
     print( f'[*] Total score: {total_score}' )
 
 def print_summary(points):
+    the_good = []
+    the_bad = []
+    the_ugly = []
     for p in points:
         title = p['title']
         if p['point'] == 'good':
-            print( f'[+] {title}' )
+            the_good.append( f'[+] {title}' )
         elif p['point'] == 'neutral':
-            print( f'[*] {title}' )
+            the_bad.append( f'[*] {title}' )
         elif p['point'] == 'bad':
-            print( f'[-] {title}' )
+            the_ugly.append( f'[-] {title}' )
+    print( '--Positive--' )
+    for g in the_good:
+        print( g )
+    print( '--Neutral--' )
+    for b in the_bad:
+        print( b )
+    print( '--Negative--' )
+    for u in the_ugly:
+        print( u )
+
+def find_close_match(site):
+    json_file = open(API_FILE)
+    data = json.load(json_file)
+    for k, v in data.items():
+        k.replace('tosdr/review/', '')
+        if site in k and 'see' in v:
+            return v['see']
+        elif site in k:
+            return k
+    return None
 
 def main(site, verbose=False, summary=False):
     print( f'-----Privacy Policy Info for {site}-----' )
+    close_match = None
     with open(API_FILE) as json_file:
         data = None
         try:
@@ -50,13 +74,16 @@ def main(site, verbose=False, summary=False):
             elif summary:
                 points = data['points']
                 print_summary(points)
+            print( '--Privacy Grade--' )
             if not rating:
                 print( f'[-] {site} has not been rated yet' )
                 return
             print( f'[*] Overall privacy rating: {rating}' )
         except Exception as e:
+            close_match = find_close_match(site)
             print( f'[-] Data not found for {site}' )
-            print( f'[*] DEBUG: {e}' )
+            if close_match:
+                print( f'[+] Did you mean \'{close_match}\'?' )
         
 if __name__=="__main__":
     parser = argparse.ArgumentParser(description="Python3 CLI to analyze Privacy Policies for a given site")
