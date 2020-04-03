@@ -9,8 +9,10 @@
 
 import argparse
 import json
+import os
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
-API_FILE = 'data/all.json'
+API_FILE = f'{dir_path}/data/all.json'
 
 def print_verbose(points):
     total_score = 0
